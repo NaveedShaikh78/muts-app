@@ -1,0 +1,8 @@
+.card {
+    border: solid 1px #1890ff;
+    margin:5px !important; 
+    width: 95%;
+}
+.ant-tabs-nav .ant-tabs-tab {
+    padding: 10px !important;
+}

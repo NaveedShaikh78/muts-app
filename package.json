@@ -1,0 +1,25 @@
+{
+  "name": "muts-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "antd": "^3.2.3",
+    "axios": "^0.18.0",
+    "fusioncharts": "^3.12.2",
+    "moment": "^2.19.3",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-fusioncharts": "^1.0.4",
+    "react-scripts": "1.1.1",
+    "react-table": "^6.8.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "theme": {
+    "primary-color": "#fff"
+  }
+}
