@@ -32,7 +32,15 @@
 .container {
   background: rgb(190, 200, 200) !important;
 }
+.ant-layout-header{
+  padding-left: 0px !important;
+}
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+@media screen and (max-width: 1000px) {
+  .ant-layout-sider-collapsed, .ant-menu-inline-collapsed, .ant-menu-inline-collapsed {
+    display: none;
+  }
 }

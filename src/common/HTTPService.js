@@ -18,7 +18,7 @@ export default class HTTPService {
         });
     }
     serve = (api, data = {}, spin, resolve) => {
-        return axios.get(`http://harisautomation.com/global/api/${api}`,
+        return axios.post(`http://harisautomation.com/global/api/${api}`,
             data
         ).then(response => {
             clearInterval(this.interval);

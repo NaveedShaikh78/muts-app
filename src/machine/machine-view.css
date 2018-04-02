@@ -5,4 +5,28 @@
 }
 .ant-tabs-nav .ant-tabs-tab {
     padding: 10px !important;
+    margin: 0px !important;
+}
+.ant-tabs-bar {
+    margin-bottom: 0 !important;
+}
+.mac-container {
+    display: flex; /* or inline-flex */
+    flex-direction: row;
+    flex-wrap:wrap;
+    padding: 5px !important;
+}
+.mac-container div, select {
+    flex-grow:1; /* default 0 */
+    width: 50%;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    background: transparent;
+    border-bottom:1px solid #1890ff;
+    vertical-align: middle;
+}
+.mac-container :nth-child(even)
+{
+    border-left:1px solid #1890ff;
 }

@@ -7,26 +7,24 @@ import { Row, Col } from 'antd';
 
 export default class LiveStatus extends Component {
     render() {
-        return (
-            <Row>
-                { this.machines.map((obj, i) =>
+        return (<Row>
+                  {this.machines.map((obj, i) =>
                     <Col xs={12} sm={12} md={8} lg={8} xl={6}>< MachineView key ={i} machine ={obj} /></Col>
-                    )
-                }
-            </Row>);
-    }
+                  )}
+                </Row>
+        );}
     constructor() {
         super();
         var server = window.HTTPService;
         var Application = window.Application;
         this.machines = [
-            new Machine(26, "Machine 1"),
-            new Machine(13, "Machine 2"),
-            new Machine(6, "Machine 3"),
-            new Machine(5, "Machine 4"),
-            new Machine(22, "Machine 6"),
-            new Machine(27, "Machine 7"),
-            new Machine(17, "Machine 8"),
+            new Machine(26, "Mac 1"),
+            new Machine(13, "Mac 2"),
+            new Machine(6, "Mac 3"),
+            new Machine(5, "Mac 4"),
+            new Machine(22, "Mac 6"),
+            new Machine(27, "Mac 7"),
+            new Machine(17, "Mac 8"),
         ];
         // Login to Server
         var apiParam = { 'username': 'global', 'password': 'global@#', 'cuid': "" };

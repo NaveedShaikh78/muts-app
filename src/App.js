@@ -3,7 +3,7 @@ import LiveStatus from './live-status/live-status';
 import 'antd/dist/antd.css';
 import './App.css';
 import { Layout, Menu, Icon, Button, Spin } from 'antd';
-// import logo from './logo.svg';
+import logo from './logo.svg';
 import './App.css';
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
@@ -13,9 +13,9 @@ class App extends Component {
     return (
       <Layout className="fullheight" >
         <Header className="header">
-          <div className="logo" >
-            {/*<img src={logo} className="App-logo" alt="logo" />*/}
-          </div>
+          {/* <div className="logo" >
+            {<img src={logo} className="App-logo" alt="logo" />}
+          </div> */}
           <Menu
             theme="dark"
             mode="horizontal"
