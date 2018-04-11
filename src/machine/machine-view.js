@@ -1,37 +1,89 @@
 import React, { Component } from 'react';
 import './machine-view.css';
-import { Tabs, Icon, Badge, Input } from 'antd';
+import { Tabs, Icon, Badge, Progress } from 'antd';
 const TabPane = Tabs.TabPane;
 
 export default class MachineView extends Component {
+  constructor(props) {
+    super(props);
+    props.machine.macView = this;
+    this.state = {
+      state: 'on',
+      jobCount: 0,
+      cycleTimer: "00:00",
+      selOperator: 0,
+      selJob: 0,
+      selIdle: 0,
+      progress: {},
+      operatorList: [],
+      jobList: [],
+      idleList: []
+    }
+  }
+  handleChange(type, e) {
+    window.application.spinOn();
+    const val = e.target.value;
+    var apiParam = { type, tval: val, ip: this.props.machine.id }
+    window.HTTPService.HTTPserveGet("updatemachinestatus.php", apiParam)
+      .then(result => {
+        window.application.spinOff();
+        if (result && result[0] === "success") {
+          if (type === "op") {
+            this.setState({
+              selOperator: val
+            });
+          }
+          if (type === "idle") {
+            this.setState({
+              selIdle: val
+            });
+          }
+          if (type === "job") {
+            this.setState({
+              selJob: val
+            });
+          }
+        }
+      });
+    return true;
+  }
   render() {
     return (
-      <Tabs defaultActiveKey="2" className="card">
-        <TabPane tab={<span><Badge status="processing" />{this.props.machine.name}</span>} key="1">
-          <div className="mac-container" layout="row" layout-wrap>
-            <div>Count</div>
-            <div>{this.props.machine.jobCount}</div>
-            <div>
-              Timer
-            </div>
-            <div>
-              <md-progress-circular className="led {this.props.machine.state}" md-mode="determinate" value="{this.props.machine.progress}" md-diameter="20px"></md-progress-circular>
-              <div>
-                <div >{this.props.machine.cycleTimer}</div>
-                <md-progress-linear value="{this.props.machine.progress}" ng-class="{'md-warn':$ctrl.machine.state !== 'on'}"></md-progress-linear>
+      <Tabs defaultActiveKey="1" className="card">
+        <TabPane tab={<span>{this.props.machine.name}</span>} key="1">
+          <div className="mac-container">
+            <div className="mitem">Count</div>
+            <div className="mitem">{this.state.jobCount}</div>
+            <div className="flex-container">
+              <div style={{ width: 50 }}>
+                <Badge status="processing" className={this.state.state} />
               </div>
+              <Progress percent={100} className="flex-item-auto"
+                status={this.state.state === "state-on" ? "active" : "exception"}
+                showInfo={false}
+                style={{ opacity: 50 }}
+                successPercent={this.state.progress} />
+              <div style={{ width: 90, textAlign: 'right' }}>{this.state.cycleTimer}</div>
             </div>
-            <div>Operator</div>
-            <select ng-options="op.opname for op in $ctrl.machine.app.operatorList track by op.id" ng-change="$ctrl.operatorChange()"
-              ng-model="$ctrl.machine.selOperator" >
-              <option selected="selected" value="" hidden="">Select</option></select>
-            <div>Job</div>
-            <select ng-options="job.jobname for job in $ctrl.machine.app.jobList track by job.id" ng-change="$ctrl.jobChange()" ng-model="$ctrl.machine.selJob">
-              <option selected="selected" value="" hidden=""> Select</option></select>
-            <div>Idle</div>
-            <select ng-options="idle.idledesc for idle in $ctrl.machine.app.idleList track by idle.id" ng-change="$ctrl.idleChange()"
-              ng-model="$ctrl.machine.selIdle" >
-              <option selected="selected" value="" hidden="">Select</option></select>
+            <div className="mitem"> Operator</div>
+            <select value={this.state.selOperator} onChange={(e) => this.handleChange("op", e)}>
+              {this.state.operatorList.map((obj, i) =>
+                <option value={obj.id} key={i}>{obj.opname}</option>
+              )}
+            </select>
+            <div className="mitem"> Job </div>
+            <select value={this.state.selJob} onChange={(e) => this.handleChange("job", e)}>
+              {this.state.jobList.map((obj, i) =>
+                <option value={obj.id} key={i}>{obj.jobname}</option>
+              )}
+            </select>
+            <div className="mitem"> Idle </div>
+            <select value={this.state.selIdle} onChange={(e) => this.handleChange("idle", e)}>
+              {this.state.idleList.map((obj, i) =>
+                <option value={obj.id} key={i}>{obj.idledesc}</option>
+              )}
+            </select>
+
           </div>
         </TabPane>
         <TabPane tab={<span><Icon type="android" />Tab 2</span>} key="2">

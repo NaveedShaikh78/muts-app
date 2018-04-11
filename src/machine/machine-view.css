@@ -16,7 +16,23 @@
     flex-wrap:wrap;
     padding: 5px !important;
 }
-.mac-container div, select {
+.ant-badge-status {
+    padding-left: 5px !important;
+}
+.state-off .ant-badge-status-processing:after{
+    border:1px solid  rgb(245, 72, 66) !important;
+}
+.state-on .ant-badge-status-processing{
+    background: rgb(12, 160, 12) !important;
+    height: 10px !important;
+    width: 10px !important;
+}
+.state-off .ant-badge-status-processing{
+    background: rgb(245, 72, 66) !important;
+    height: 10px !important;
+    width: 10px !important;
+}
+.mac-container .mitem, select {
     flex-grow:1; /* default 0 */
     width: 50%;
     border-left: 0;
@@ -26,7 +42,23 @@
     border-bottom:1px solid #1890ff;
     vertical-align: middle;
 }
-.mac-container :nth-child(even)
+select {
+    outline:0px;
+    border-bottom:1px solid #0fa12f;
+}
+.flex-container {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-content: stretch;
+ }
+ .flex-item {
+    flex-basis:  auto; /* default auto */
+  }
+  .flex-item-auto {
+    flex-shrink:1;
+}
+.mac-container .mitem :nth-child(even)
 {
     border-left:1px solid #1890ff;
 }

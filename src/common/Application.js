@@ -7,9 +7,15 @@ export default class Application {
   operatorList = [];
   jobList = [];
   spinOn =()=> {
+   this.appmain.setState({
+    showSpin: true
+   });
    this.spin =true;
   }
   spinOff =()=> {
    this.spin =false;
+   this.appmain.setState({
+    showSpin: false
+   });
   }
 }

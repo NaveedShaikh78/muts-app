@@ -1,4 +1,5 @@
 import axios from 'axios';
+import querystring from 'querystring';
 
 export default class HTTPService {
 
@@ -14,12 +15,12 @@ export default class HTTPService {
             if (this.cuid) {
                 data.cuid = this.cuid;
             }
-           // this.interval = setInterval(() => {this.serve(api, data, spin, resolve)}, 10000);
+            // this.interval = setInterval(() => {this.serve(api, data, spin, resolve)}, 10000);
         });
     }
     serve = (api, data = {}, spin, resolve) => {
         return axios.post(`http://harisautomation.com/global/api/${api}`,
-            data
+            JSON.stringify(data)
         ).then(response => {
             clearInterval(this.interval);
             resolve(response);
@@ -32,18 +33,32 @@ export default class HTTPService {
             return response;
         });
     }
-    HTTPserve = (api, data = {}, result) => {
-        return axios.get(`http://harisautomation.com/global/api/${api}`,
-            data
+    HTTPserve = (api, data = {}, obj, key) => {
+        data.cuid = this.cuid;
+        return axios.post(`http://harisautomation.com/global/api/${api}`,
+            querystring.stringify(data)
         ).then(response => {
-            result = response.data;
-            return response;
+            if (obj) {
+                obj[key] = response.data;
+            }
+            return response.data;
         }).catch(e => {
             return false;
             //  return setTimeout(() =>{ this.loadapi(api, data)}, 990000);
+        });
+    }
+    HTTPserveGet = (api, data = {}, obj, key) => {
+        data.cuid = this.cuid;
+        return axios.get(`http://harisautomation.com/global/api/${api}`, {
+            params: data
         }).then(response => {
-            window.application.spinOff();
-            return response;
+            if (obj) {
+                obj[key] = response.data;
+            }
+            return response.data;
+        }).catch(e => {
+            return false;
+            //  return setTimeout(() =>{ this.loadapi(api, data)}, 990000);
         });
     }
 }
