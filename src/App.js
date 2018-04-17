@@ -4,7 +4,7 @@ import DataReport from './reports/data-report';
 import 'antd/dist/antd.css';
 import './App.css';
 import { Layout, Menu, Icon, Spin } from 'antd';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
@@ -104,8 +104,9 @@ class App extends Component {
     showSpin: true,
     currentOpt: "live"
   };
-  setMenue = menu => {
-    this.setState(menu);
+  setMenue = stateObj => {
+    stateObj.collapsed = true;
+    this.setState(stateObj);
   }
   toggle = () => {
     this.setState({

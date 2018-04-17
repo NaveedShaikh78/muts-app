@@ -1,5 +1,4 @@
 import React from "react";
-import { render } from "react-dom";
 import _ from 'lodash'
 
 // Import React Table
