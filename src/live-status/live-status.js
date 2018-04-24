@@ -18,7 +18,7 @@ export default class LiveStatus extends Component {
         super();
         var server = window.HTTPService;
         var app = window.application;
-        this.machines = [
+        const machines = [
             new Machine(26, "Mac 1"),
             new Machine(13, "Mac 2"),
             new Machine(6, "Mac 3"),
@@ -27,37 +27,35 @@ export default class LiveStatus extends Component {
             new Machine(27, "Mac 7"),
             new Machine(17, "Mac 8"),
         ];
+        this.machines = machines;
+        app.machines = machines;
         // Login to Server
-        var apiParam = { 'username': 'global', 'password': 'global@#', 'cuid': "" };
-        app.spinOn();
-        server
-            .HTTPserve("login.php", apiParam)
-            .then(response => {
-                server.SetCUId(response);
-                apiParam = { "rtype": "getData" };
-                server.HTTPserve("idle.php", apiParam, app, "idleList").then(response => {
-                    server.HTTPserve("job.php", apiParam, app, "jobList").then(response => {
-                        server.HTTPserve("operator.php", apiParam, app, "operatorList").then(response => {
-                            app.spinOff();
-                            if (response) {
-                                this.machines.forEach(machine => machine.setMacLists())
-                            }
-                        });
-                    });
-                });
-            });
-        this.statusInterval = setInterval(() => { this.getCurrentStatus(server) }, 9000);
+        this.statusInterval = setInterval(() => { this.getCurrentStatus(server, app, machines) }, 9000);
+        app.showLoginDialog({ visible: true });
 
     }
-    getCurrentStatus = (server) => {
+    
+    getCurrentStatus = (server, app, machines) => {
+        var db = window.database;
+        
+        if (db.lastRec && !this.wait) {
+            this.wait = true;
+            server
+                .HTTPserve("getLogs.php", { start: db.lastRec, end: db.lastRec + 999 }, false)
+                .then(response => {
+                    db.addLogs(response).then(() => {
+                        this.wait = false;
+                    });
+                });
+        }
         server
             .HTTPserve("machinestatus.php", {}, false)
             .then(response => {
-                this.machines.forEach(function (machine) {
-                    if (response && response !== "Failed") {
+                if (response && response !== "Failed") {
+                    machines.forEach(function (machine) {
 
                         var machineData = response[machine.id];
-                        if (machine) {
+                        if (machine & machineData) {
                             // ctrl.MachineController.setSelIdle(sdata[ioports[i]].idleid, ioports[i]);
                             var mactime = new Date(machineData.statetime);
                             var tmsec = Date.now() - mactime;
@@ -72,8 +70,10 @@ export default class LiveStatus extends Component {
                             machine.progress = machineData.status === '1' ? machine.progress : 0;
                             machine.setMacViewValues();
                         }
-                    }
-                });
+
+                    });
+                } else {
+                }
             });
     }
 

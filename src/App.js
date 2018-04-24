@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import LoginDialog from './login/login'
 import LiveStatus from './live-status/live-status';
 import DataReport from './reports/data-report';
+import Jobs from './settings/jobs';
+import Operators from './settings/operators';
+import Idles from './settings/idles';
+import SearchPanel from './reports/search-panel';
 import 'antd/dist/antd.css';
 import './App.css';
 import { Layout, Menu, Icon, Spin } from 'antd';
@@ -8,16 +13,18 @@ import { Layout, Menu, Icon, Spin } from 'antd';
 import './App.css';
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
-
+let app;
 class App extends Component {
   constructor() {
     super();
     this.state.collapsed = true;
-    window.application.appmain = this;
+    app = window.application;
+    app.appmain = this;
   }
   render() {
     return (
       <Layout className="fullheight" >
+        <LoginDialog />
         <Header className="header">
           {/* <div className="logo" >
             {<img src={logo} className="App-logo" alt="logo" />}
@@ -54,20 +61,36 @@ class App extends Component {
                 </div>
               </Menu.Item>
               <SubMenu key="sub1" title={<span><Icon type="user" /> User</span>}>
-                <Menu.Item key="4"><Icon type="logout" />Logout</Menu.Item>
+                <Menu.Item key="4">
+                  <div onClick={(e) =>app.loginDialog.logout()} >
+                    <Icon type="logout"  />Logout
+                </div>
+                </Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" title={<span><Icon type="pie-chart" /> Reports</span>}>
                 <Menu.Item key="5" >
                   <div onClick={(e) => this.setMenue({ currentOpt: "datareport" }, e)}>
-                    <Icon type="info-circle-o" />
-                    Data reports
+                    <Icon type="info-circle-o" /> Data reports
                   </div>
                 </Menu.Item>
               </SubMenu>
               <SubMenu key="sub3" title={<span><Icon type="setting" /> Settings</span>}>
-                <Menu.Item key="7" ><Icon type="solution" />Operator</Menu.Item>
-                <Menu.Item key="8"><Icon type="api" />Jobs</Menu.Item>
-                <Menu.Item key="9"><Icon type="exception" />Idle List</Menu.Item>
+                <Menu.Item key="7" >
+                  <div onClick={(e) => this.setMenue({ currentOpt: "operators" }, e)}>
+                    <Icon type="solution" />Operators
+                    </div>
+                </Menu.Item>
+                <Menu.Item key="8">
+                  <div onClick={(e) => this.setMenue({ currentOpt: "jobs" }, e)}>
+                    <Icon type="api" />Jobs
+                  </div>
+                </Menu.Item>
+                <Menu.Item key="9">
+                  <div onClick={(e) => this.setMenue({ currentOpt: "idles" }, e)}>
+                    <Icon type="exception" />Idle List
+                </div>
+                </Menu.Item>
+                <Menu.Item key="10"><Icon type="file-markdown" />Machines</Menu.Item>
               </SubMenu>
             </Menu>
 
@@ -81,12 +104,16 @@ class App extends Component {
                 <Button type="danger" ghost>danger</Button> */}
               <div className={this.state.currentOpt === "live" ? "show" : "hide"} > <LiveStatus /></div>
               <div className={this.state.currentOpt === "datareport" ? "show" : "hide"} > <DataReport /></div>
+              <div className={this.state.currentOpt === "jobs" ? "show" : "hide"} > <Jobs /></div>
+              <div className={this.state.currentOpt === "operators" ? "show" : "hide"} > <Operators /></div>
+              <div className={this.state.currentOpt === "idles" ? "show" : "hide"} > <Idles /></div>
             </Content>
           </Layout>
+          <Sider className ="rigthsliderwidth" width ="250"><SearchPanel /></Sider>
         </Layout>
-        <Footer style={{ textAlign: 'center' }}>
+        {/* <Footer style={{ textAlign: 'center' }}>
           Haris Automation ©2011
-        </Footer>
+        </Footer> */}
         {
           this.state.showSpin ?
             <div className="loader">

@@ -46,18 +46,7 @@ select {
     outline:0px;
     border-bottom:1px solid #0fa12f;
 }
-.flex-container {
-    width: 100%;
-    display: flex;
-    flex-flow: row nowrap;
-    align-content: stretch;
- }
- .flex-item {
-    flex-basis:  auto; /* default auto */
-  }
-  .flex-item-auto {
-    flex-shrink:1;
-}
+
 .mac-container .mitem :nth-child(even)
 {
     border-left:1px solid #1890ff;

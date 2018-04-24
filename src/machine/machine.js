@@ -15,11 +15,7 @@ export default class Machine {
             selIdle: this.selIdle.id
         });
     }
-    setMacLists() {
-        this.macView.setState({
-            operatorList: window.application.operatorList,
-            jobList: window.application.jobList,
-            idleList: window.application.idleList,
-        });
+    setMacList(list) {
+        this.macView.setState(list);
     }
 }

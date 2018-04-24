@@ -15,22 +15,24 @@ export default class HTTPService {
             if (this.cuid) {
                 data.cuid = this.cuid;
             }
-            // this.interval = setInterval(() => {this.serve(api, data, spin, resolve)}, 10000);
+            this.HTTPserve(api, data).then(res => {
+                if (!res) {
+                    this.interval = setInterval(() => { this.serve(api, data, resolve) }, 10000);
+                } else {
+                    resolve(res);
+                }
+            });
         });
     }
-    serve = (api, data = {}, spin, resolve) => {
+    serve = (api, data = {}, resolve) => {
         return axios.post(`http://harisautomation.com/global/api/${api}`,
-            JSON.stringify(data)
+            querystring.stringify(data)
         ).then(response => {
             clearInterval(this.interval);
-            resolve(response);
-            return response;
+            resolve(response.data);
+            return response.data;
         }).catch(e => {
             return false;
-            //  return setTimeout(() =>{ this.loadapi(api, data)}, 990000);
-        }).then(response => {
-            window.application.spinOff();
-            return response;
         });
     }
     HTTPserve = (api, data = {}, obj, key) => {
