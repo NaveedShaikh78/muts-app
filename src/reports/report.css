@@ -1,0 +1,10 @@
+p{
+    margin-left: 5px;
+    padding-top:8px;
+    font-weight:bold;
+    min-width: 40px;
+}
+.search-pannel {
+    background: rgb(234, 242, 245);
+    border-left: 2px solid #53bddd !important;
+  }
