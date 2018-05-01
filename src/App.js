@@ -8,7 +8,7 @@ import Idles from './settings/idles';
 import SearchPanel from './reports/search-panel';
 import 'antd/dist/antd.css';
 import './App.css';
-import { Layout, Menu, Icon, Spin } from 'antd';
+import { Button, Layout, Menu, Icon, Spin, Progress } from 'antd';
 // import logo from './logo.svg';
 import './App.css';
 const { SubMenu } = Menu;
@@ -25,25 +25,34 @@ class App extends Component {
     return (
       <Layout className="fullheight" >
         <LoginDialog />
-        <Header className="header">
+
+        <div className="header-container" theme="light">
+          <div className="flex-container">
+            <Button
+              icon={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+              onClick={this.toggle} ghost></Button>
+            <Button onClick={(e) => this.setMenu("live", e)}
+              icon="dashboard" ghost>Live</Button>
+            <Button onClick={(e) => this.setMenu("datareport", e)}
+              icon="info-circle-o" ghost>Data Report</Button>
+            <div className="flex-item-auto">hello</div>
+            <Button
+              style={{ position:'absolute', right:0,top:0}}
+              className="flex-item-auto"
+              icon={this.state.collapsedRight ? 'menu-fold' : 'menu-unfold'}
+              onClick={this.toggleRight} ghost></Button>
+          </div>
+          <Progress
+            percent={100}
+            status="active"
+            size="small"
+            showInfo={false} />
+
           {/* <div className="logo" >
             {<img src={logo} className="App-logo" alt="logo" />}
           </div> */}
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            style={{ lineHeight: '64px' }}
-          >
-            <Menu.Item key="1">
-              <Icon
-                className="trigger"
-                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                onClick={this.toggle}
-              />
-            </Menu.Item>
-            <Menu.Item key="2">nav 1</Menu.Item>
-          </Menu>
-        </Header>
+        </div>
+
         <Layout>
           <Sider
             trigger={null}
@@ -56,37 +65,37 @@ class App extends Component {
               style={{ height: '100%', borderRight: 0 }}
             >
               <Menu.Item key="3" >
-                <div onClick={(e) => this.setMenue({ currentOpt: "live" }, e)}>
+                <div onClick={(e) => this.setMenu("live", e)}>
                   <Icon type="dashboard" /> Live
                 </div>
               </Menu.Item>
               <SubMenu key="sub1" title={<span><Icon type="user" /> User</span>}>
                 <Menu.Item key="4">
-                  <div onClick={(e) =>app.loginDialog.logout()} >
-                    <Icon type="logout"  />Logout
+                  <div onClick={(e) => app.loginDialog.logout()} >
+                    <Icon type="logout" />Logout
                 </div>
                 </Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" title={<span><Icon type="pie-chart" /> Reports</span>}>
                 <Menu.Item key="5" >
-                  <div onClick={(e) => this.setMenue({ currentOpt: "datareport" }, e)}>
+                  <div onClick={(e) => this.setMenu("datareport", e)}>
                     <Icon type="info-circle-o" /> Data reports
                   </div>
                 </Menu.Item>
               </SubMenu>
               <SubMenu key="sub3" title={<span><Icon type="setting" /> Settings</span>}>
                 <Menu.Item key="7" >
-                  <div onClick={(e) => this.setMenue({ currentOpt: "operators" }, e)}>
+                  <div onClick={(e) => this.setMenu("operators", e)}>
                     <Icon type="solution" />Operators
                     </div>
                 </Menu.Item>
                 <Menu.Item key="8">
-                  <div onClick={(e) => this.setMenue({ currentOpt: "jobs" }, e)}>
+                  <div onClick={(e) => this.setMenu("jobs", e)}>
                     <Icon type="api" />Jobs
                   </div>
                 </Menu.Item>
                 <Menu.Item key="9">
-                  <div onClick={(e) => this.setMenue({ currentOpt: "idles" }, e)}>
+                  <div onClick={(e) => this.setMenu("idles", e)}>
                     <Icon type="exception" />Idle List
                 </div>
                 </Menu.Item>
@@ -96,12 +105,7 @@ class App extends Component {
 
           </Sider>
           <Layout >
-
             <Content className='container'>
-              {/* <Button type="primary" ghost>Primary</Button>
-                <Button ghost>Default</Button>
-                <Button type="dashed" ghost>Dashed</Button>
-                <Button type="danger" ghost>danger</Button> */}
               <div className={this.state.currentOpt === "live" ? "show" : "hide"} > <LiveStatus /></div>
               <div className={this.state.currentOpt === "datareport" ? "show" : "hide"} > <DataReport /></div>
               <div className={this.state.currentOpt === "jobs" ? "show" : "hide"} > <Jobs /></div>
@@ -109,11 +113,10 @@ class App extends Component {
               <div className={this.state.currentOpt === "idles" ? "show" : "hide"} > <Idles /></div>
             </Content>
           </Layout>
-          <Sider className ="rigthsliderwidth" width ="250"><SearchPanel /></Sider>
+          <Sider collapsible trigger={null}
+            collapsed={this.state.collapsedRight}
+            className="rigthsliderwidth" width="250"><SearchPanel /></Sider>
         </Layout>
-        {/* <Footer style={{ textAlign: 'center' }}>
-          Haris Automation ©2011
-        </Footer> */}
         {
           this.state.showSpin ?
             <div className="loader">
@@ -128,16 +131,22 @@ class App extends Component {
   }
   state = {
     collapsed: false,
-    showSpin: true,
+    showSpin: false,
     currentOpt: "live"
   };
-  setMenue = stateObj => {
-    stateObj.collapsed = true;
-    this.setState(stateObj);
+  setMenu = state => {
+    this.setState({ currentOpt: state, collapsed: true });
   }
   toggle = () => {
     this.setState({
+      collapsedRight: this.state.collapsed && !this.state.collapsedRight ? true : this.state.collapsedRight,
       collapsed: !this.state.collapsed,
+    });
+  }
+  toggleRight = () => {
+    this.setState({
+      collapsed: !this.state.collapsed && this.state.collapsedRight ? true : this.state.collapsed,
+      collapsedRight: !this.state.collapsedRight,
     });
   }
 }

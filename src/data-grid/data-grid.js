@@ -17,9 +17,11 @@ export default class DataGrid extends React.Component {
 
       this.state.pageSize = pageSize ? pageSize : 8
       props.confs.dataGrid = this;
+      this.state.pivotBy=[];
       if (cols) {
         cols.forEach(col => {
-          if (col.aggrigateSum) {
+          col.pivoted && this.state.pivotBy.push(col.accessor);
+            if (col.aggrigateSum) {
             col.aggregate = vals => {
               return _.round(_.sum(vals));
             },
@@ -50,6 +52,7 @@ export default class DataGrid extends React.Component {
             pivotBy={this.state.pivotBy}
             collapseOnSortingChange={false}
             filterable
+            
             getTrProps={(state, rowInfo) => {
               return {
                 onClick: (e) => {
@@ -62,6 +65,8 @@ export default class DataGrid extends React.Component {
                  
                 },
                 style: {
+                  padding:'0px!important',
+                  height:'auto',
                   border : rowInfo &&  rowInfo.index === this.state.selected ? '1px solid':'none',
                   borderColor: rowInfo &&  rowInfo.index === this.state.selected ? '#00afec' : 'white'
                 }

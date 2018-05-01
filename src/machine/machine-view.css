@@ -1,7 +1,10 @@
 .card {
-    border: solid 1px #1890ff;
+    border: solid 1px #bdc1c5;
+    background: rgba(220, 221, 223, 0.911);
     margin:5px !important; 
+    min-width: 200px;
     width: 95%;
+    box-shadow: 1px 1px 1px #888888;
 }
 .ant-tabs-nav .ant-tabs-tab {
     padding: 10px !important;
@@ -14,7 +17,7 @@
     display: flex; /* or inline-flex */
     flex-direction: row;
     flex-wrap:wrap;
-    padding: 5px !important;
+    padding: 8px !important;
 }
 .ant-badge-status {
     padding-left: 5px !important;
@@ -32,22 +35,25 @@
     height: 10px !important;
     width: 10px !important;
 }
-.mac-container .mitem, select {
+.mac-container .mitem {
     flex-grow:1; /* default 0 */
-    width: 50%;
-    border-left: 0;
-    border-right: 0;
-    border-top: 0;
-    background: transparent;
+    width: 30%;
+    border:0;
     border-bottom:1px solid #1890ff;
+    background: transparent;
     vertical-align: middle;
 }
 select {
     outline:0px;
+    width: 70%;
+    background: transparent;
+    border:0;
     border-bottom:1px solid #0fa12f;
 }
 
-.mac-container .mitem :nth-child(even)
+.mac-container .mitem :nth-child(odd)
 {
     border-left:1px solid #1890ff;
+    width: 20% !important;
+    
 }

@@ -28,7 +28,7 @@ $retval = mysql_query( $sql, $conn );
 
   if(! $retval )
   {
-    print json_encode([$sql]);
+    print json_encode([mysql_error()]);
     die('');
   }
 $rows=[];

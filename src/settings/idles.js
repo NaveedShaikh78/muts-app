@@ -9,6 +9,7 @@ export default class Idles extends Component {
         super(props);
         server = window.HTTPService;
         app = window.application;
+        app.idles =this;
         const data = [];
         const apiParam = { "rtype": "getData" };
         const cols = [{
@@ -34,18 +35,7 @@ export default class Idles extends Component {
         }
         this.confs = confs;
         this.confs.onRowClick = this.onRowClick;
-        app.spinOn();
-        server.HTTPserve("idle.php", apiParam, app, "idleList")
-            .then(data => {
-                if (data) {
-                    this.confs.data = data;
-                    app.machines.forEach(machine => machine.setMacList({idleList: data }))
-                    confs.dataGrid.setState({
-                        data
-                    });
-                }
-                app.spinOff();
-            });
+        
     }
     onRowClick = selectedRow => {
         this.setState(selectedRow);

@@ -22,9 +22,44 @@
   vertical-align: bottom;
   text-align: right;
 }
+.header-container {
+  background: #001529;
+  line-height:0 !important ;
+  min-height: 50px;
+}
+.header-container .ant-progress-inner{
+  vertical-align: auto !important;
+}
+.header-container button{
+  margin: 10px;
+}
+.header-container .ant-progress {
+  line-height:0 !important ;
+  position: relative;
+  bottom: 0;
+}
+.header-container .ant-progress-bg {
+  height: 3px !important;
+  background: #61dafb !important;
+}
+.ant-layout-sider{
+  box-shadow: 1px 1px 1px #888888;
+}
+.datestyle{
+  border: 1px solid #53bddd;
+  margin-top: 5px;
+  border-radius: 4px;
+  margin-right: 5px;
+  height: 30px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
 .no-border-label{
   width: 40%;
   border: 0!important;
+}
+.rt-td{
+  padding: 0px !important;
 }
 .margin-left {
   margin-left: 10px;
@@ -102,11 +137,16 @@ max-width: 270px !important;
   padding-left: 5px;
 }
 .container {
-  background: rgb(241, 248, 248) !important;
+  background: rgb(236, 236, 238) !important;
+  padding: 5px;
 }
 .ant-layout-header{
   padding-left: 0px !important;
 }
+.ant-layout-sider-collapsed input{
+  width:30px;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

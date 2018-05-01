@@ -13,7 +13,7 @@ export default class Application {
     this.spin = true;
   }
   showLoginDialog = (show) => {
-    this.loginDialog.show(show);
+    return this.loginDialog.show(show);
   }
   spinOff = () => {
     this.spin = false;

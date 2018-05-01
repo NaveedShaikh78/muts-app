@@ -7,7 +7,7 @@
     "axios": "^0.18.0",
     "dexie": "^2.0.2",
     "fusioncharts": "^3.12.2",
-    "moment": "^2.19.3",
+    "moment": "^2.22.1",
     "querystring": "^0.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

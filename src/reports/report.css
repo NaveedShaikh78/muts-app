@@ -5,6 +5,9 @@ p{
     min-width: 40px;
 }
 .search-pannel {
-    background: rgb(234, 242, 245);
-    border-left: 2px solid #53bddd !important;
+  background: rgb(223, 225, 228) ;
+    box-shadow: -2px 1px 1px  #d3d1d1;
+  }
+  input,.ant-select-selection {
+      background: rgba(190, 192, 196, 0.8)!important;
   }

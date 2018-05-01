@@ -30,14 +30,14 @@ export default class LiveStatus extends Component {
         this.machines = machines;
         app.machines = machines;
         // Login to Server
-        this.statusInterval = setInterval(() => { this.getCurrentStatus(server, app, machines) }, 9000);
+        this.statusInterval = setInterval(() => { this.getCurrentStatus(server, app, machines) }, 4000);
         app.showLoginDialog({ visible: true });
 
     }
-    
+
     getCurrentStatus = (server, app, machines) => {
         var db = window.database;
-        
+
         if (db.lastRec && !this.wait) {
             this.wait = true;
             server
@@ -73,6 +73,8 @@ export default class LiveStatus extends Component {
 
                     });
                 } else {
+                    app.showLoginDialog({ visible: true });
+
                 }
             });
     }

@@ -9,6 +9,7 @@ export default class Jobs extends Component {
         super(props);
         server = window.HTTPService;
         app = window.application;
+        app.jobs =this;
         const data = [];
         const apiParam = { "rtype": "getData" };
         const cols = [{
@@ -38,16 +39,7 @@ export default class Jobs extends Component {
         }
         this.confs = confs;
         this.confs.onRowClick = this.onRowClick;
-        server.HTTPserve("job.php", apiParam, app, "jobList")
-            .then(data => {
-                if (data) {
-                    this.confs.data = data;
-                    app.machines.forEach(machine => machine.setMacList({jobList: data }))
-                    confs.dataGrid.setState({
-                        data
-                    });
-                }
-            });
+        
     }
     onRowClick = selectedRow => {
         this.setState(selectedRow);

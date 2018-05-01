@@ -14,7 +14,7 @@ export default class SearchPanel extends Component {
         app.searchPanel = this;
         this.state = {
             spanDuration: "detailed",
-            ioport: "allmac",
+            ioport: "26",
             opid: "0",
             jobno: "0",
             idle: "0",
@@ -39,46 +39,29 @@ export default class SearchPanel extends Component {
         this.setState(props);
     }
     search = () => {
-        var people = [
-            { mc: '1', op: 'Alice', age: 1 },
-            { mc: '1', op: 'Alice', age: 2 },
-            { mc: '1', op: 'Naveed', age: 3 },
-            { mc: '1', op: 'Naveed', age: 4 },
-            { mc: '2', op: 'Naveed', age: 5 },
-            { mc: '2', op: 'Alice', age: 5 },
-            { mc: '3', op: 'Naveed', age: 5 },
-            { mc: '3', op: 'Alice', age: 5 },
-            { mc: '3', op: 'Naveed', age: 5 },
-        ];
-        function groupBy(objectArray, property) {
-            const temp = [];
-            return objectArray.reduce(function (acc, obj) {
-                var mc = obj['mc'];
-                var op = obj['op'];
-                if (!acc[mc]) {                 
-                    acc[mc] = [];
-                }
-                
-                if (!acc[mc][op]) {
-                    acc[mc][op] = [];
-                    acc[mc][op].sum =0 ;
-                }
-
-                acc[mc][op].sum +=1;
-                return acc;
-            }, {});
-        }
-        console.log(groupBy(people, 'op'));
         const { ioport, start_time, end_time } = this.state;
+        let reportData;
         app.spinOn();
-        window.database.getLogData({
+        const filter = {
             ioport,
             start_time: moment(start_time, dateFormat).toDate(),
             end_time: moment(end_time, dateFormat).toDate(),
-        }).then(data => {
+        }
+        app.dataReport.setReportColumn(this.state.spanDuration);
+        switch(this.state.spanDuration ){
+            case "detailed":
+            reportData = window.database.getLogData(filter);
+            break;
+            case "dsc":
+            reportData = window.database.jobCountList(filter);
+            break;
+            case "msc":
+            break;
+        }
+        reportData.then(data => {
             app.spinOff();
             app.appmain.setMenu("datareport");
-            app.dataReportConf.dataGrid.setState({ data: data });
+            app.dataReport.confs.dataGrid.setState({ data: data });
         });
     }
     render() {
@@ -106,7 +89,7 @@ export default class SearchPanel extends Component {
                     <Option value="17">Machines 7</Option>
                 </Select>
                 <Select
-                    defaultValue="allop"
+                    defaultValue="0"
                     className="fullwidth"
                     value={this.state.opid}
                     onChange={(v) => this.handleChange("opid", v)}>

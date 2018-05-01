@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import WrappedNormalLoginForm from './login-form'
-import { Form, Input, Button, Modal } from 'antd';
+import { Modal } from 'antd';
 let app;
 let server;
+let db;
 export default class LoginDialog extends Component {
     constructor(props) {
         super(props);
         app = window.application;
         server = window.HTTPService;
+        db = window.database;
         app.loginDialog = this;
     }
     state = {
         loading: false,
         visible: false,
     }
+
     show = show => {
         const username = localStorage.getItem('username');
         const password = localStorage.getItem('password');
@@ -30,11 +33,14 @@ export default class LoginDialog extends Component {
         localStorage.setItem('password', '');
         localStorage.setItem('remember', false);
         server.SetCUId('');
-        this.setState({visible:true});
+        this.setState({ visible: true });
+    }
+    uiLogin = (server, app, apiParam) => {
+        app.spinOn();
+        return this.login(server, app, apiParam);
     }
     login = (server, app, apiParam) => {
         apiParam.cuid = "";
-        app.spinOn();
         return server
             .HTTPserve("login.php", apiParam)
             .then(response => {
@@ -44,11 +50,42 @@ export default class LoginDialog extends Component {
                     localStorage.setItem('password', apiParam.password);
                     localStorage.setItem('remember', apiParam.remember);
                     server.SetCUId(response);
+                    apiParam = { "rtype": "getData" };
+                    server.HTTPserve("idle.php", apiParam, app, "idleList").then(idleList => {
+                        server.HTTPserve("job.php", apiParam, app, "jobList").then(jobList => {
+                            server.HTTPserve("operator.php", apiParam, app, "operatorList").then(operatorList => {
+                                if (operatorList) {
+                                    db.addList(idleList, 'idleList');
+                                    db.addList(jobList, 'jobList');
+                                    db.addList(operatorList, 'operatorList');
+                                    this.updateList({ operatorList, jobList, idleList });
+                                }
+                            });
+                        });
+                    });
                     this.setState({ visible: false });
                     return true;
+                } else {
+                    db.getList('operatorList').then(operatorList => {
+                        app.operatorList = operatorList;
+                        db.getList('jobList').then(jobList => {
+                            app.jobList = jobList;
+                            db.getList('idleList').then(idleList => {
+                                app.idleList = idleList;
+                                this.updateList({ operatorList, jobList, idleList });
+                            });
+                        });
+                    });
                 }
                 return false;
             });
+    }
+    updateList = ({ operatorList, jobList, idleList }) => {
+        app.operators.confs.dataGrid.setState({ data: operatorList });
+        app.jobs.confs.dataGrid.setState({ data: jobList });
+        app.idles.confs.dataGrid.setState({ data: idleList });
+        app.searchPanel.setState({ operatorList, jobList, idleList })
+        app.machines.forEach(machine => machine.setMacList({ operatorList, jobList, idleList }));
     }
     handleOk = () => {
         this.setState({ loading: true });
@@ -77,9 +114,9 @@ export default class LoginDialog extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                 >
-                    <WrappedNormalLoginForm login={this.login} />
+                    <WrappedNormalLoginForm login={this.uiLogin} />
                 </Modal>
-            </div>
+            </div >
         );
     }
 }

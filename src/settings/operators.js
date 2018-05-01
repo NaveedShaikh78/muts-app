@@ -9,6 +9,7 @@ export default class Operators extends Component {
         super(props);
         server = window.HTTPService;
         app = window.application;
+        app.operators = this;
         const data = [];
         const apiParam = { "rtype": "getData" };
         const cols = [{
@@ -34,16 +35,6 @@ export default class Operators extends Component {
         }
         this.confs = confs;
         this.confs.onRowClick = this.onRowClick;
-        server.HTTPserve("operator.php", apiParam, app, "operatorList")
-            .then(data => {
-                if (data) {
-                    this.confs.data = data;
-                    app.machines.forEach(machine => machine.setMacList({ operatorList: data }))
-                    confs.dataGrid.setState({
-                        data
-                    });
-                }
-            });
     }
     onRowClick = selectedRow => {
         this.setState(selectedRow);
