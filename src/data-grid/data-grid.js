@@ -18,28 +18,23 @@ export default class DataGrid extends React.Component {
       this.state.pageSize = pageSize ? pageSize : 8
       props.confs.dataGrid = this;
       this.state.pivotBy = [];
-      const colsGrouped = [
-        { Header: "srno", accessor: "srno", show: false },
-        { Header: "Machine", accessor: "macname", pivoted: true, },
-        { Header: "Operator", accessor: "opname", pivoted: true },
-        { Header: "Job count", accessor: "jobcount", aggrigateSum: true },
-
-      ];
-      //this.setColumns( colsGrouped);
 
     }
   }
   setColumns(cols) {
     if (cols) {
+      this.state.pivotBy = [];
       cols.forEach(col => {
-        //col.pivoted && this.state.pivotBy.push(col.accessor);
+        col.pivoted && this.state.pivotBy.push(col.accessor);
         if (col.aggrigateSum) {
-          col.aggregate = vals => {
-            return _.round(_.sum(vals));
-          },
-            col.Aggregated = row =>
-              <span>
-                {row.value} (sum)
+          col.aggregate = function (vals) {
+            const sumt = _.round(_.sum(vals));
+
+            return isNaN(sumt) ? 0 : sumt
+          }
+          col.Aggregated = row =>
+            <span>
+              {row.value} (sum)
             </span>
         }
       });
@@ -51,27 +46,38 @@ export default class DataGrid extends React.Component {
       <div>{
         this.state ?
           <ReactTable
-            data={[{macname: "Mac 1", opname: "Nitin bambal", jobname: "377 VCT Blow by core", jobcount: 746},
-            
-            {macname: "Mac 1", opname: "Nitin bambal", jobname: "377 VCT Inlet/Ex core", jobcount: 644},
-            
-            {macname: "Mac 1", opname: "champak", jobname: "377 VCT Blow by core", jobcount: 2521}]}
+            data={this.state.data}
             columns={[
               {
-                columns: [
-                  { Header: "srno", accessor: "srno", show: false },
-                  { Header: "Machine", accessor: "macname" },
-                  { Header: "Operator", accessor: "opname"},
-                  { Header: "Job count", accessor: "jobcount"},
-
-                ]
+                columns: this.state.cols
+              },
+              {
+                expander: this.state.pivotBy ? true : false
               }
             ]}
             className="-striped -highlight"
-            pivotBy={["macname", "opname"]}
+            pivotBy={this.state.pivotBy}
+            collapseOnSortingChange={false}
             filterable
+            getTrProps={(state, rowInfo) => {
+              return {
+                onClick: (e) => {
+                  if (this.props.confs && this.props.confs.onRowClick) {
+                    this.props.confs.onRowClick(rowInfo.original);
+                    this.setState({
+                      selected: rowInfo.index.toString()
+                    })
+                  }
 
-
+                },
+                style: {
+                  padding: '0px!important',
+                  height: 'auto',
+                  border: rowInfo && rowInfo.index === this.state.selected ? '1px solid' : 'none',
+                  borderColor: rowInfo && rowInfo.index === this.state.selected ? '#00afec' : 'white'
+                }
+              }
+            }}
           /> : null
       }</div>
     );

@@ -2,7 +2,7 @@
     border: solid 1px #bdc1c5;
     background: rgba(220, 221, 223, 0.911);
     margin:5px !important; 
-    min-width: 200px;
+    min-width: 150px;
     width: 95%;
     box-shadow: 1px 1px 1px #888888;
 }
@@ -37,7 +37,8 @@
 }
 .mac-container .mitem {
     flex-grow:1; /* default 0 */
-    width: 30%;
+    width: 35%;
+    min-width: 35px;
     border:0;
     border-bottom:1px solid #1890ff;
     background: transparent;
@@ -45,7 +46,7 @@
 }
 select {
     outline:0px;
-    width: 70%;
+    width: 65%;
     background: transparent;
     border:0;
     border-bottom:1px solid #0fa12f;

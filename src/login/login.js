@@ -55,6 +55,7 @@ export default class LoginDialog extends Component {
                         server.HTTPserve("job.php", apiParam, app, "jobList").then(jobList => {
                             server.HTTPserve("operator.php", apiParam, app, "operatorList").then(operatorList => {
                                 if (operatorList) {
+                                    this.setState({ visible: false });
                                     db.addList(idleList, 'idleList');
                                     db.addList(jobList, 'jobList');
                                     db.addList(operatorList, 'operatorList');
@@ -63,19 +64,20 @@ export default class LoginDialog extends Component {
                             });
                         });
                     });
-                    this.setState({ visible: false });
                     return true;
                 } else {
-                    db.getList('operatorList').then(operatorList => {
-                        app.operatorList = operatorList;
-                        db.getList('jobList').then(jobList => {
-                            app.jobList = jobList;
-                            db.getList('idleList').then(idleList => {
-                                app.idleList = idleList;
-                                this.updateList({ operatorList, jobList, idleList });
+                    if (app.operatorList) {
+                        db.getList('operatorList').then(operatorList => {
+                            app.operatorList = operatorList;
+                            db.getList('jobList').then(jobList => {
+                                app.jobList = jobList;
+                                db.getList('idleList').then(idleList => {
+                                    app.idleList = idleList;
+                                    this.updateList({ operatorList, jobList, idleList });
+                                });
                             });
                         });
-                    });
+                    }
                 }
                 return false;
             });

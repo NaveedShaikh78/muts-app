@@ -4,10 +4,29 @@ p{
     font-weight:bold;
     min-width: 40px;
 }
+.ant-checkbox-group{
+  margin-left: 5px !important;
+}
+.ant-checkbox-group-item  {
+width: 90px;
+}
 .search-pannel {
   background: rgb(223, 225, 228) ;
     box-shadow: -2px 1px 1px  #d3d1d1;
   }
   input,.ant-select-selection {
       background: rgba(190, 192, 196, 0.8)!important;
+  }
+  .search-pannel .ant-progress-inner{
+    vertical-align: auto !important;
+  }
+  
+  .search-pannel .ant-progress {
+    line-height:0 !important ;
+    position: relative;
+    bottom: 0;
+  }
+  .search-pannel .ant-progress-bg {
+    height: 4px !important;
+    background: #50bddb !important;
   }

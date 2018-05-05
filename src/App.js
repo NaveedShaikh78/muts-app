@@ -8,11 +8,11 @@ import Idles from './settings/idles';
 import SearchPanel from './reports/search-panel';
 import 'antd/dist/antd.css';
 import './App.css';
-import { Button, Layout, Menu, Icon, Spin, Progress } from 'antd';
+import { Button, Layout, Menu, Icon, Spin } from 'antd';
 // import logo from './logo.svg';
 import './App.css';
 const { SubMenu } = Menu;
-const { Header, Content, Sider, Footer } = Layout;
+const { Content, Sider } = Layout;
 let app;
 class App extends Component {
   constructor() {
@@ -42,12 +42,7 @@ class App extends Component {
               icon={this.state.collapsedRight ? 'menu-fold' : 'menu-unfold'}
               onClick={this.toggleRight} ghost></Button>
           </div>
-          <Progress
-            percent={100}
-            status="active"
-            size="small"
-            showInfo={false} />
-
+         
           {/* <div className="logo" >
             {<img src={logo} className="App-logo" alt="logo" />}
           </div> */}
@@ -132,6 +127,7 @@ class App extends Component {
   state = {
     collapsed: false,
     showSpin: false,
+    downloadPercent:100,
     currentOpt: "live"
   };
   setMenu = state => {

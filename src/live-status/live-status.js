@@ -30,7 +30,7 @@ export default class LiveStatus extends Component {
         this.machines = machines;
         app.machines = machines;
         // Login to Server
-        this.statusInterval = setInterval(() => { this.getCurrentStatus(server, app, machines) }, 4000);
+        this.statusInterval = setInterval(() => { this.getCurrentStatus(server, app, machines) }, 5000);
         app.showLoginDialog({ visible: true });
 
     }
@@ -43,9 +43,17 @@ export default class LiveStatus extends Component {
             server
                 .HTTPserve("getLogs.php", { start: db.lastRec, end: db.lastRec + 999 }, false)
                 .then(response => {
-                    db.addLogs(response).then(() => {
+                    if (response) {
+                        const total = parseInt(response.count[0].srno, 10);
+                        const downloded = response.data.length === 0 ? total : parseInt(response.data[response.data.length - 1].srno, 10);
+                        app.searchPanel.setState({
+                            downloadPercent: utility.percentage(downloded, total)
+                        });
+                    }
+                    db.addLogs(response.data).then(() => {
                         this.wait = false;
-                    });
+                        
+                    })
                 });
         }
         server
@@ -55,8 +63,7 @@ export default class LiveStatus extends Component {
                     machines.forEach(function (machine) {
 
                         var machineData = response[machine.id];
-                        if (machine & machineData) {
-                            // ctrl.MachineController.setSelIdle(sdata[ioports[i]].idleid, ioports[i]);
+                        if (machine && machineData) {
                             var mactime = new Date(machineData.statetime);
                             var tmsec = Date.now() - mactime;
                             var HHmmss = utility.miliSecToHms(tmsec);

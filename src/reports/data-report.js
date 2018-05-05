@@ -1,88 +1,83 @@
 import React, { Component } from 'react';
 import DataGrid from './../data-grid/data-grid';
-import moment from 'moment';
 let colsDetailed;
 let colsGrouped;
 export default class DataReport extends Component {
-constructor() {
-  super();
-  const app = window.application;
-  colsDetailed = [
-    { Header: "srno", accessor: "srno", show: false },
-    { Header: "Machine", accessor: "ioport" },
-    { Header: "Operator", accessor: "opname" },
-    { Header: "Job", accessor: "jobname" },
-    { Header: "Job count", accessor: "jobcount", aggrigateSum: true },
-    {
-      Header: "Start Time", accessor: "start_time",
-      Cell: props => {
-        props.value = moment(props.value).format('DD/MM/YY HH:mm:ss')
-        return <span className='number'>{props.value}</span>;
-      }
-    },
-    {
-      Header: "End Time", accessor: "end_time",
-      Cell: props => {
-        props.value = moment.utc(parseInt(props.value, 10) * 1000).format('HH:mm:ss')
-        return <span className='number'>{props.value}</span>;
-      }
-    },
-    {
-      Header: "Cycle Time", accessor: "cycletime",
-      Cell: props => {
-        props.value = moment.utc(parseInt(props.value, 10) * 1000).format('HH:mm:ss')
-        return <span className='number'>{props.value}</span>;
-      }
-    }, {
-      Header: "Idle Time", accessor: "idletime",
-      Cell: props => {
-        props.value = moment.utc(parseInt(props.value, 10) * 1000).format('HH:mm:ss')
-        return <span className='number'>{props.value}</span>;
-      }
+  constructor() {
+    super();
+    colsDetailed = [
+      { Header: "srno", accessor: "srno", show: false },
+      { Header: "Machine", accessor: "macname" },
+      { Header: "Operator", accessor: "opname" },
+      { Header: "Job", accessor: "jobname" },
+      { Header: "Start Time", accessor: "start_time", width: 130 },
+      { Header: "End Time", accessor: "end_time", width: 130 },
+      { Header: "Cycle Time", accessor: "cycletime", width: 80 },
+      { Header: "Idle Time", accessor: "idletime", width: 80 }
+    ];
+    colsGrouped = [
+      { Header: "srno", accessor: "srno", show: false },
+      { Header: "Machine", accessor: "macname", pivoted: true, },
+      { Header: "Date", accessor: "date", pivoted: true, },
+      { Header: "Operator", accessor: "opname", pivoted: true },
+      { Header: "Job", accessor: "jobname", pivoted: true },
+      { Header: "Shift1", accessor: "shift1Count", aggrigateSum: true },
+      { Header: "Shift2", accessor: "shift2Count", aggrigateSum: true },
+
+    ];
+    this.confs = {
+      data: [],
+      cols: colsGrouped,
+      pageSize: 7
+    };
+    window.application.dataReport = this;
+    this.colsMap = {
+      ioport: "macname",
+      opid: "opname",
+      jobno: "jobname"
     }
-  ];
-  colsGrouped = [
-    { Header: "srno", accessor: "srno", show: false },
-    { Header: "Machine", accessor: "macname", pivoted: true, },
-    { Header: "Operator", accessor: "opname", pivoted: true },
-    { Header: "Job", accessor: "jobname", pivoted: true },
-    { Header: "Job count", accessor: "jobcount", aggrigateSum: true },
-    {
-      Header: "Cycle Time", accessor: "cycletime",
-      Cell: props => {
-        props.value = moment.utc(parseInt(props.value, 10) * 1000).format('HH:mm:ss')
-        return <span className='number'>{props.value}</span>;
-      }
-    }, {
-      Header: "Idle Time", accessor: "idletime", Cell: props => {
-        props.value = moment.utc(parseInt(props.value, 10) * 1000).format('HH:mm:ss')
-        return <span className='number'>{props.value}</span>;
-      }
+  }
+  setReportColumn(prop, spanDuration) {
+    switch (spanDuration) {
+      case "detailed":
+        this.confs.dataGrid.setState({ cols: colsDetailed });
+        this.appliedCols = colsDetailed;
+        break;
+      case "dsc":
+        const filtCols = colsGrouped.filter(x => x.accessor !== this.colsMap[prop]);
+        this.confs.dataGrid.setColumns(filtCols);
+        this.appliedCols = filtCols;
+        break;
+      case "msc":
+        break;
+      default:
+        this.confs.dataGrid.setState({ cols: colsDetailed });
+        this.appliedCols = colsDetailed;
+        break;
     }
-  ];
-  this.confs = {
-    data: [],
-    cols: colsDetailed,
-    pageSize: 7
-  };
-  window.application.dataReport = this;
-}
-setReportColumn(spanDuration){
-  switch(spanDuration ){
-    case "detailed":
-    this.confs.dataGrid.setState({ cols: colsDetailed });
-    break;
-    case "dsc":
-    this.confs.dataGrid.setState({ cols: colsGrouped });
-    break;
-    case "msc":
-    break;
-}
-}
-render() {
-  return (
-    <DataGrid confs={this.confs} />
-  );
-}
+  }
+  filter = (colName, filterList) => {
+    let retval = false
+    filterList.forEach(item => {
+      if (item === colName) {
+        retval = true;
+      }
+    });
+    return retval;
+  }
+  filterReportCols(filterList) {
+    if (this.appliedCols && filterList) {
+      const cloneFilterList = filterList.slice(0);
+      cloneFilterList.push("srno");
+      const filtCols = this.appliedCols.filter(x => this.filter(x.accessor, cloneFilterList));
+      this.confs.dataGrid.setColumns(filtCols);
+
+    }
+  }
+  render() {
+    return (
+      <DataGrid confs={this.confs} />
+    );
+  }
 
 }
