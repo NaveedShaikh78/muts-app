@@ -23,9 +23,9 @@ export default class DataGrid extends React.Component {
   }
   setColumns(cols) {
     if (cols) {
-      this.state.pivotBy = [];
+      const pivotBy = [];
       cols.forEach(col => {
-        col.pivoted && this.state.pivotBy.push(col.accessor);
+        col.pivoted && pivotBy.push(col.accessor);
         if (col.aggrigateSum) {
           col.aggregate = function (vals) {
             const sumt = _.round(_.sum(vals));
@@ -38,7 +38,7 @@ export default class DataGrid extends React.Component {
             </span>
         }
       });
-      this.setState({ cols });
+      this.setState({ cols, pivotBy});
     }
   }
   render() {
@@ -65,12 +65,12 @@ export default class DataGrid extends React.Component {
                   if (this.props.confs && this.props.confs.onRowClick) {
                     this.props.confs.onRowClick(rowInfo.original);
                     this.setState({
-                      selected: rowInfo.index.toString()
+                      selected: rowInfo.index
                     })
                   }
 
                 },
-                style: {
+                style: this.state.pivotBy.length >0 ? null: {
                   padding: '0px!important',
                   height: 'auto',
                   border: rowInfo && rowInfo.index === this.state.selected ? '1px solid' : 'none',

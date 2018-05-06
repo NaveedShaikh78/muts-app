@@ -6,14 +6,13 @@
     "antd": "^3.2.3",
     "axios": "^0.18.0",
     "dexie": "^2.0.2",
-    "fusioncharts": "^3.12.2",
     "moment": "^2.22.1",
     "querystring": "^0.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-fusioncharts": "^1.0.4",
     "react-scripts": "1.1.1",
-    "react-table": "^6.8.0"
+    "react-table": "^6.8.0",
+    "recharts": "^1.0.0-beta.10"
   },
   "scripts": {
     "start": "react-scripts start",

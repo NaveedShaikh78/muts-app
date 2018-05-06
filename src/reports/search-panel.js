@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Checkbox, Button, Input, Progress } from 'antd';
+import { Select, Checkbox, Button, Progress } from 'antd';
 import moment from 'moment';
 import './report.css';
 const CheckboxGroup = Checkbox.Group;

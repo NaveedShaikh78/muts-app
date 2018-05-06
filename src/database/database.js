@@ -137,7 +137,7 @@ export default class Database {
     addLogs = logs => {
         if (logs) {
             if (logs.length > 0) {
-                this.lastRec = parseInt(logs[logs.length - 1].srno, 10) + 1, 10;
+                this.lastRec = parseInt(logs[logs.length - 1].srno, 10) + 1;
             }
             return Promise.all(logs.map(log => {
                 log.srno = parseInt(log.srno, 10);

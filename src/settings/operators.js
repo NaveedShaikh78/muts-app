@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import DataGrid from './../data-grid/data-grid';
-import { Input, Icon, Button, Popconfirm } from 'antd';
+import { Input, Button, Popconfirm } from 'antd';
 import './settings.css'
 var server;
 var app;
@@ -11,7 +11,6 @@ export default class Operators extends Component {
         app = window.application;
         app.operators = this;
         const data = [];
-        const apiParam = { "rtype": "getData" };
         const cols = [{
             Header: "id",
             accessor: "id",
@@ -32,6 +31,7 @@ export default class Operators extends Component {
         this.state = {
             opid: '',
             opname: '',
+            confs
         }
         this.confs = confs;
         this.confs.onRowClick = this.onRowClick;
@@ -40,7 +40,7 @@ export default class Operators extends Component {
         this.setState(selectedRow);
     }
     dbServeOperation = (opType) => {
-        const confs = this.confs;
+        const data = this.confs.dataGrid.state.data;
         const apiParam = this.state;
         apiParam.rtype = opType;
         app.spinOn();
@@ -49,17 +49,17 @@ export default class Operators extends Component {
                 if (response) {
                     if (opType === "insertData") {
                         apiParam.id = response[0];
-                        confs.data.push(apiParam);
+                        data.push(apiParam);
                     } else if (opType === "deleteData") {
-                        confs.data.splice(confs.data.findIndex(obj => obj.id == apiParam.id), 1);
+                        data.splice(data.findIndex(obj => obj.id === apiParam.id), 1);
                     } else {
-                        const obj = confs.data.find(obj => obj.id == apiParam.id)
+                        const obj = data.find(obj => obj.id === apiParam.id)
                         for (var prop in obj) {
                             obj[prop] = apiParam[prop];
                         }
                     }
-                    confs.dataGrid.setState({
-                        data: confs.data
+                    this.confs.dataGrid.setState({
+                        data
                     });
                 }
                 app.spinOff();
