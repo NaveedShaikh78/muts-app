@@ -6,10 +6,11 @@ import Jobs from './settings/jobs';
 import Operators from './settings/operators';
 import Idles from './settings/idles';
 import SearchPanel from './reports/search-panel';
+import ChartReport from './reports/chart-report';
 import 'antd/dist/antd.css';
 import './App.css';
 import { Button, Layout, Menu, Icon, Spin } from 'antd';
-// import logo from './logo.svg';
+import logo from './logo.png';
 import './App.css';
 const { SubMenu } = Menu;
 const { Content, Sider } = Layout;
@@ -38,14 +39,15 @@ class App extends Component {
             <div className="flex-item-auto">hello</div>
             <Button
               style={{ position:'absolute', right:0,top:0}}
-              className="flex-item-auto"
+              className="flex-item-auto app-logo"
               icon={this.state.collapsedRight ? 'menu-fold' : 'menu-unfold'}
               onClick={this.toggleRight} ghost></Button>
+              <div className="logo" >
+            {/* {<img src={logo} width={40} alt="logo" />} */}
+          </div> 
           </div>
          
-          {/* <div className="logo" >
-            {<img src={logo} className="App-logo" alt="logo" />}
-          </div> */}
+          
         </div>
 
         <Layout>
@@ -101,11 +103,13 @@ class App extends Component {
           </Sider>
           <Layout >
             <Content className='container'>
+              
               <div className={this.state.currentOpt === "live" ? "show" : "hide"} > <LiveStatus /></div>
               <div className={this.state.currentOpt === "datareport" ? "show" : "hide"} > <DataReport /></div>
               <div className={this.state.currentOpt === "jobs" ? "show" : "hide"} > <Jobs /></div>
               <div className={this.state.currentOpt === "operators" ? "show" : "hide"} > <Operators /></div>
               <div className={this.state.currentOpt === "idles" ? "show" : "hide"} > <Idles /></div>
+              <div className={this.state.currentOpt === "chartreport" ? "show" : "hide"} ><ChartReport /></div>
             </Content>
           </Layout>
           <Sider collapsible trigger={null}

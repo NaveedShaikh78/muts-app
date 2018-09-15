@@ -15,7 +15,7 @@ export default class SearchPanel extends Component {
         const date = moment().format(dateFormat);
         var morningStart = moment(date + "T08:00:00", dateTimeFormat).format(dateTimeFormat);
         var morningEnd = moment(date + "T20:00:00", dateTimeFormat).format(dateTimeFormat);
-        this.options = [
+        this.optionsDSC = [
             { label: 'Machine  ', value: 'macname', id: "ioport" },
             { label: 'Job', value: 'jobname', id: "jobno" },
             { label: 'Date', value: 'date', id: "date" },
@@ -23,6 +23,16 @@ export default class SearchPanel extends Component {
             { label: 'Shift1', value: 'shift1Count', id: "shift1Count" },
             { label: 'Shift2', value: 'shift2Count', id: "shift2Count" }
         ];
+        this.optionsDetailed = [
+            { label: "Machine", value: "macname",id: "macname" },
+            { label: "Operator", value: "opname",id: "opname" },
+            { label: "Job", value: "jobname",id: "jobname" },
+            { label: "StartTime", value: "start_time",id: "start_time" },
+            { label: "EndTime", value: "end_time",id: "end_time" },
+            { label: "CycleTime", value: "cycletime",id: "cycletime"},
+            { label: "IdleTime", value: "idletime",id: "idletime"}
+          ];
+        this.options = this.optionsDSC.slice();
         this.state = {
             spanDuration: "dsc",
             ioport: "0",
@@ -50,15 +60,16 @@ export default class SearchPanel extends Component {
         props[prop] = val;
         this.selProp = prop;
 
-        if (val !== "0") {
-            props.options = this.options.filter(x => x.id !== prop);
-        } else {
-            props.options = this.options;
+        if (val === "detailed") {
+            props.options = this.optionsDetailed;
+        } 
+        if (val === "dsc") {
+            props.options = this.optionsDSC
         }
-        if (prop === "spanDuration" && val === "detailed") {
-            props.ioport = "26";
-            props.options = this.options.filter(x => x.id !== "shift1Count" && x.id !== "shift2Count" && x.id !== "total");
-        }
+        // if (prop === "spanDuration" && val === "detailed") {
+        //     props.ioport = "26";
+        //     props.options = this.options.filter(x => x.id !== "shift1Count" && x.id !== "shift2Count" && x.id !== "total");
+        // }
         this.setState(props);
     }
     handleDateChange = (prop, e) => {
@@ -67,7 +78,7 @@ export default class SearchPanel extends Component {
         props[prop] = val;
         this.setState(props);
     }
-    search = () => {
+    search = type => {
         const { ioport, jobno, opid, start_time, end_time } = this.state;
         let reportData;
         app.spinOn();
@@ -94,10 +105,16 @@ export default class SearchPanel extends Component {
         }
         reportData.then(data => {
             app.spinOff();
-            app.appmain.setMenu("datareport");
-            app.dataReport.confs.dataGrid.setState({ data });
+            if (type === "data") {
+                app.appmain.setMenu("datareport");
+                app.dataReport.confs.dataGrid.setState({ data });
+            } else {
+                app.appmain.setMenu("chartreport");
+                app.chartReport.setState({data});
+            }
         });
     }
+
     render() {
         return (
             <div className="fullheight search-pannel ">
@@ -136,7 +153,7 @@ export default class SearchPanel extends Component {
                     onChange={(v) => this.handleChange("opid", v)}>
                     <Option value="0">All Operators</Option>
                     {this.state.operatorList.map((obj, i) =>
-                        <Option key={obj.id} >{obj.opname}</Option>
+                        <Option key={obj.opid} >{obj.opname}</Option>
                     )}
                 </Select>
                 <Select
@@ -166,9 +183,9 @@ export default class SearchPanel extends Component {
 
                 </div>
 
-                <Button className="fullwidth" onClick={this.search} icon="search" type="primary" ghost>Search</Button>
-                <Button className="fullwidth" icon="pie-chart" type="primary" ghost>Chart</Button>
-                <CheckboxGroup options={this.state.options} defaultValue={['macname', 'date', 'jobname', 'opname', 'shift1Count', 'shift2Count']}
+                <Button className="fullwidth" onClick={() => this.search('data')} icon="search" type="primary" ghost>Search</Button>
+                <Button className="fullwidth" onClick={() => this.search('chart')} icon="pie-chart" type="primary" ghost>Chart</Button>
+                <CheckboxGroup options={this.state.options} defaultValue={['macname', 'date', 'jobname', 'opname', 'shift1Count', 'shift2Count', 'idletime', 'start_time', 'end_time', 'cycletime']}
                     onChange={this.handleCheckGroupChange} />
 
             </div>

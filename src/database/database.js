@@ -14,7 +14,7 @@ export default class Database {
                 if (obj) {
                     this.lastRec = parseInt(obj.srno, 10);
                 } else {
-                    this.lastRec = 508050;
+                    this.lastRec = 1;
                 }
             });
         });
@@ -22,23 +22,22 @@ export default class Database {
     }
     getLogData(filter) {
         const result = [];
-        return this.db.machinelog.where(["ioport+start_time"])
-            .between([filter.ioport, filter.start_time], [filter.ioport, filter.end_time])
-            .toArray(arr => {
-                arr.forEach(item => {
-                    const opname = this.getFieldValue(item.opid, app.operatorList, 'opname');
-                    const jobname = this.getFieldValue(item.jobno, app.jobList, 'jobname');
-                    const macname = this.getFieldValue(parseInt(item.ioport, 10), app.machines, 'name');
-                    result.push({
-                        macname,
-                        opname,
-                        jobname,
-                        start_time: moment(item.start_time).format('DD/MM/YY HH:mm:ss'),
-                        end_time: moment(item.end_time).format('DD/MM/YY HH:mm:ss'),
-                        idletime: moment.utc(parseInt(item.idletime, 10) * 1000).format('HH:mm:ss'),
-                        cycletime: moment.utc(parseInt(item.cycletime, 10) * 1000).format('HH:mm:ss')
-
-                    });
+        return this.searchData("ioport", filter).then(objectArray => {
+                    objectArray.forEach(item => {
+                        const opname = this.getFieldValue(item.opid, app.operatorList, 'opname');
+                        const jobname = this.getFieldValue(item.jobno, app.jobList, 'jobname');
+                        const macname = this.getFieldValue(parseInt(item.ioport, 10), app.machines, 'name');
+                        result.push({
+                            macname,
+                            opname,
+                            jobname,
+                            start_time: moment(item.start_time).format('DD/MM/YY HH:mm:ss'),
+                            end_time: moment(item.end_time).format('DD/MM/YY HH:mm:ss'),
+                            idletime: moment.utc(parseInt(item.idletime, 10) * 1000).format('HH:mm:ss'),
+                            cycletime: moment.utc(parseInt(item.cycletime, 10) * 1000).format('HH:mm:ss'),
+                            idletimesec:parseInt(item.idletime,10),
+                            cycletimesec:parseInt(item.cycletime,10),
+                        });
                 });
                 return result;
             });
@@ -49,7 +48,7 @@ export default class Database {
         return this.getJobCount(col, filter, result);
 
     }
-    getJobCount = (col, filter, result) => {
+    searchData = (col, filter) => {
         const value = filter[col];
         let cond = `[${col}+start_time]`;
         let val1 = [value, filter.start_time];
@@ -62,7 +61,10 @@ export default class Database {
             val2 = filter.end_time;
         }
         return this.db.machinelog.where(cond)
-            .between(val1, val2).toArray().then(objectArray => {
+        .between(val1, val2).toArray()
+    }
+    getJobCount = (col, filter, result) => {
+        return this.searchData(col, filter).then(objectArray => {
                 const temp = objectArray.reduce(function (acc, obj) {
                     var mc = obj.ioport;
                     var op = obj.opid;

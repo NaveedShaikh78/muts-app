@@ -7,7 +7,7 @@ export default class DataReport extends Component {
     super();
     colsDetailed = [
       { Header: "srno", accessor: "srno", show: false },
-      { Header: "Machine", accessor: "macname" },
+      { Header: "Machine", accessor: "macname", width: 130 },
       { Header: "Operator", accessor: "opname" },
       { Header: "Job", accessor: "jobname" },
       { Header: "Start Time", accessor: "start_time", width: 130 },
@@ -40,7 +40,7 @@ export default class DataReport extends Component {
   setReportColumn(prop, spanDuration) {
     switch (spanDuration) {
       case "detailed":
-        this.confs.dataGrid.setState({ cols: colsDetailed });
+        this.confs.dataGrid.setColumns(colsDetailed);
         this.appliedCols = colsDetailed;
         break;
       case "dsc":
@@ -51,7 +51,7 @@ export default class DataReport extends Component {
       case "msc":
         break;
       default:
-        this.confs.dataGrid.setState({ cols: colsDetailed });
+        this.confs.dataGrid.setColumns(colsDetailed);
         this.appliedCols = colsDetailed;
         break;
     }

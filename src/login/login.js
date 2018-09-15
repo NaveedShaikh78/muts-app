@@ -21,6 +21,7 @@ export default class LoginDialog extends Component {
         const username = localStorage.getItem('username');
         const password = localStorage.getItem('password');
         const remember = localStorage.getItem('remember');
+        
         if (remember === "true") {
             this.login(server, app, { username, password, remember });
         } else {

@@ -29,6 +29,7 @@ export default class LiveStatus extends Component {
         ];
         this.machines = machines;
         app.machines = machines;
+        this.wait = false;
         // Login to Server
         this.statusInterval = setInterval(() => { this.getCurrentStatus(server, app, machines) }, 5000);
         app.showLoginDialog({ visible: true });
@@ -59,7 +60,7 @@ export default class LiveStatus extends Component {
         server
             .HTTPserve("machinestatus.php", {}, false)
             .then(response => {
-                if (response && response !== "Failed") {
+                if (response && response[0] !== "Failed") {
                     machines.forEach(function (machine) {
 
                         var machineData = response[machine.id];
