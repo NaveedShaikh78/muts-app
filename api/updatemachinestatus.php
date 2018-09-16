@@ -3,11 +3,11 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 require 'includes/connectdb.php';
 $conn = connect();
-$st=$_GET["st"];
-$ip=$_GET["ip"];
-$ss=$_GET["ss"];
-$type=$_GET["type"];
-$tval=$_GET["tval"];
+$st=isset($_GET['st']) ? $_GET['st'] : "";
+$ip=isset($_GET['ip']) ? $_GET['ip'] : "";
+$ss=isset($_GET['ss']) ? $_GET['ss'] : "";
+$type=isset($_GET['type']) ? $_GET['type'] : "";
+$tval=isset($_GET['tval']) ? $_GET['tval'] : "";
 if($type=="op")
   {
     $sql = "UPDATE machinestatus SET opid=$tval where ioport=$ip;";

@@ -102,14 +102,14 @@ class App extends Component {
 
           </Sider>
           <Layout >
-            <Content className='container'>
+            <Content className='container fullheight'>
               
               <div className={this.state.currentOpt === "live" ? "show" : "hide"} > <LiveStatus /></div>
               <div className={this.state.currentOpt === "datareport" ? "show" : "hide"} > <DataReport /></div>
               <div className={this.state.currentOpt === "jobs" ? "show" : "hide"} > <Jobs /></div>
               <div className={this.state.currentOpt === "operators" ? "show" : "hide"} > <Operators /></div>
               <div className={this.state.currentOpt === "idles" ? "show" : "hide"} > <Idles /></div>
-              <div className={this.state.currentOpt === "chartreport" ? "show" : "hide"} ><ChartReport /></div>
+              <div className={this.state.currentOpt === "chartreport" ? "show fullheight" : "hide"} ><ChartReport /></div>
             </Content>
           </Layout>
           <Sider collapsible trigger={null}
