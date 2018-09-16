@@ -4,12 +4,12 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 print("\n");
 $conn = connect();
-$id=$_POST['id'];
-$rtype=$_POST['rtype'];
-$jobid=$_POST['jobid'];
-$name=$_POST['jobname'];
-$desc=$_POST['jobdesc'];
-$activejob = $_POST['activejob'];
+$id=isset($_POST['id']) ? $_POST['id'] : "";
+$rtype=isset($_POST['rtype']) ? $_POST['rtype'] : "";
+$jobid=isset($_POST['jobid']) ? $_POST['jobid'] : "";
+$name=isset($_POST['jobname']) ? $_POST['jobname'] : "";
+$desc=isset($_POST['jobdesc']) ? $_POST['jobdesc'] : "";
+$activejob = isset($_POST['activejob']) ? $_POST['activejob'] : "";
 
 if($rtype=="getData")
 {

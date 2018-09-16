@@ -28,7 +28,7 @@ else
 $retval = mysql_query($sql , $conn);
 if(!$retval)
   {
-  die("Fail 1".mysql_error.$sql);
+  die("Fail 1".$sql);
   }
 
 print json_encode( ["success"]);

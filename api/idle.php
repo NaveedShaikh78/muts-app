@@ -4,10 +4,10 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 print("\n");
 $conn = connect();
-$id=$_POST['id'];
-$rtype=$_POST['rtype'];
-$idleid=$_POST['idleid'];
-$idledesc=$_POST['idledesc'];
+$id= isset($_POST['id']) ? $_POST['id'] : "";
+$rtype= isset($_POST['rtype']) ? $_POST['rtype'] : "";
+$idleid= isset($_POST['idleid']) ? $_POST['idleid'] : "";
+$idledesc= isset($_POST['idledesc']) ? $_POST['idledesc'] : "";
 if($rtype=="getData")
 {
   $sql="select * from idle";

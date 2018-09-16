@@ -4,10 +4,10 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 print("\n");
 $conn = connect();
-$id=$_POST['id'];
-$rtype=$_POST['rtype'];
-$opid=$_POST['opid'];
-$opname=$_POST['opname'];
+$id= isset($_POST['id']) ? $_POST['id'] : "";
+$rtype=isset($_POST['rtype']) ? $_POST['rtype'] : "";
+$opid=isset($_POST['opid']) ? $_POST['opid'] : "";
+$opname=isset($_POST['opname']) ? $_POST['opname'] : "";
 if($rtype=="getData")
 {
   $sql="select * from operator";
@@ -28,7 +28,7 @@ $retval = mysql_query( $sql, $conn );
 
   if(! $retval )
   {
-    print json_encode([mysql_error()]);
+    print json_encode([$sql]);
     die('');
   }
 $rows=[];
